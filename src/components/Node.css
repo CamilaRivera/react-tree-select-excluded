@@ -12,6 +12,7 @@
   display: inline-block;
   cursor: pointer;
   margin: 0px 8px;
+  min-width: 18px;
 }
 
 .node-name {
@@ -22,10 +23,40 @@
 .node.selected > div > .select-button {
   color: green;
 }
+.node.selected > div > .select-button {
+  color: green;
+}
+
+.node.selected > div > .select-button:before {
+  content: '☑';  
+}
 
 .node.parent-selected > div > .select-button {
-  color: gray;
+  color: purple;
 }
+
+.node.parent-selected > div > .select-button:before {
+  content: '☑'; 
+}
+
 .node.excluded > div > .select-button {
   color: red;
+}
+.node.parent-excluded > div > .select-button {
+  color: pink;
+}
+.node.excluded > div > .select-button:before {
+  content:'☒'
+}
+
+.node.descendant-selected > div> .select-button {
+  color: orange;
+}
+.node.descendant-selected > div> .select-button:before {
+  content: '⊟';
+}
+
+.node > div > .select-button:before {
+  content:'□';
+  line-height: 20px;
 }

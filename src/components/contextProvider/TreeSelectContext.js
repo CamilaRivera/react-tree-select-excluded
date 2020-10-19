@@ -9,9 +9,14 @@ export const useTreeSelectContext = () => {
 const getAncestors = (nodes, getNodeId, ancestors = {}) => {
   const mapAncestors = {};
   nodes.forEach(node => {
-    mapAncestors[getNodeId(node)] = ancestors;
+    const nodeId = getNodeId(node)
+    if (mapAncestors[nodeId]) {
+      mapAncestors[nodeId] = { ...mapAncestors[nodeId], ...ancestors }
+    } else {
+      mapAncestors[nodeId] = ancestors;
+    }
     if (Array.isArray(node.children) && node.children.length > 0) {
-      const childrenAncestors = getAncestors(node.children, getNodeId, {...ancestors, [getNodeId(node)]: true});
+      const childrenAncestors = getAncestors(node.children, getNodeId, {...ancestors, [nodeId]: true});
       Object.assign(mapAncestors, childrenAncestors);
     }
   });
@@ -104,7 +109,6 @@ export const TreeSelectProvider = ({ children, roots, getNodeId, onChange, getNo
     return getDescendants(nodeToAncestors);
   }, [roots]);
 
-  console.log('nodeToDescendants', nodeToDescendants);
 
   useEffect(() => {
     if (onChange) {
@@ -153,6 +157,24 @@ export const TreeSelectProvider = ({ children, roots, getNodeId, onChange, getNo
       return true;
     }
     return false;
+  };
+
+  const isDescendantSelected = node => {
+    const descendantsFromNode = nodeToDescendants[getNodeId(node)];
+    if (!descendantsFromNode) {
+      return false;
+    }
+    // for (const descendant in descendantsFromNode) {
+    //   if (selectedNodes[descendant]) {
+    //     return true;
+    //   }
+    // };
+    for (const selectedId in selectedNodes) {
+      if (descendantsFromNode[selectedId]) {
+        return true;
+      }
+    };
+    return false;
   }
 
   const context = {
@@ -161,6 +183,7 @@ export const TreeSelectProvider = ({ children, roots, getNodeId, onChange, getNo
     removeSelectedNode,
     isSelected,
     getNodeLabel,
+    isDescendantSelected,
   };
 
   return <TreeSelectContext.Provider value={context}>{children}</TreeSelectContext.Provider>;
