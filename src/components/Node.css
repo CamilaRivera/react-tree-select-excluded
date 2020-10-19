@@ -1,0 +1,31 @@
+.node {
+  padding-left: 20px;
+}
+
+.expand-button {
+  display: inline-block;
+  min-width: 12px;
+  cursor: pointer;
+}
+
+.select-button {
+  display: inline-block;
+  cursor: pointer;
+  margin: 0px 8px;
+}
+
+.node-name {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.node.selected > div > .select-button {
+  color: green;
+}
+
+.node.parent-selected > div > .select-button {
+  color: gray;
+}
+.node.excluded > div > .select-button {
+  color: red;
+}
